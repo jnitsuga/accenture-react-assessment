@@ -3,14 +3,14 @@ import { createContext, useContext, useState } from "react";
 const UserContext = createContext();
 
 export const ContextProvider = ({children}) => {
-  const [inputEmail, setInputEmail] = useState('')
+  const [inputUsername, setInputUsername] = useState('')
   const [inputPassword, setInputPassword] = useState('')
 
   return (
     <UserContext.Provider
       value={{
-        inputEmail,
-        setInputEmail,
+        inputUsername,
+        setInputUsername,
         inputPassword,
         setInputPassword
       }}

@@ -1,23 +1,32 @@
 import Axios from 'axios'
+import { toast } from 'react-toastify';
 import { useUserContext } from '../contexts/ContextProvider'
 
 const LoginForm = () => {
-  const { inputEmail, setInputEmail, inputPassword, setInputPassword } = useUserContext();
+  const { inputUsername, setInputUsername, inputPassword, setInputPassword } = useUserContext();
 
- const login = (e) => {
-  e.preventDefault()
+  const login = async (e) => {
+    e.preventDefault()
 
-  Axios.post('https://dummyjson.com/auth/login', {
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        email: inputEmail ,
+    try {
+      await Axios.post('https://dummyjson.com/auth/login', {
+        username: inputUsername,
         password: inputPassword,
-        // expiresInMins: 60, // optional
       })
-    })
-    .then(res => res.json())
-    .then(console.log);
- }
+      .then(res => {
+        if(typeof res.data !== 'undefined') {
+          localStorage.setItem('token', res.data.token)
+          toast('Successfully logged in')
+          window.setTimeout(function() {
+            window.location='/products'
+          }, 1500)
+        }
+      })
+    } catch (error) {
+      toast('Invalid credentials. Please try again.')
+    }
+
+  }
 
   return (
     <> 
@@ -41,7 +50,7 @@ const LoginForm = () => {
                   type="email"
                   className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
                   placeholder="Enter email"
-                  onChange={(e) => {setInputEmail(e.target.value)}}
+                  onChange={(e) => {setInputUsername(e.target.value)}}
                   required
                 />
 
