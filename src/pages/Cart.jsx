@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Axios from 'axios'
 import { useUserContext } from '../contexts/ContextProvider'
 
 const Cart = () => {
   const {user, setUser} = useUserContext();
   const [productsList, setProductsList] = useState([]);
+
+  const { userId } = useParams();
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
@@ -15,11 +17,11 @@ const Cart = () => {
   }, [setUser])
 
   useEffect(() => {
-    Axios.get('https://dummyjson.com/products').then((res) => {
-      console.log(res.data.products)
-      setProductsList(res.data.products)
+    Axios.get(`https://dummyjson.com/carts/user/${userId}`).then((res) => {
+      console.log(res.data.carts)
+      setProductsList(res.data.carts)
     })
-  }, [setProductsList])
+  }, [userId])
   
 
   const logoutUser = () => {
@@ -32,7 +34,7 @@ const Cart = () => {
       <div className='mb-12'>
         <span>
           <span className='m-2'>Welcome, {user.firstName}</span>
-          <span className='m-2'><Link to="/cart">My Cart</Link></span>
+          <span className='m-2'><Link to="/products">Back to Products</Link></span>
           <span className='m-2' onClick={logoutUser}>Logout</span>
         </span>
       </div>

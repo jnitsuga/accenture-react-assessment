@@ -7,12 +7,13 @@ const Products = () => {
   const {user, setUser} = useUserContext();
   const [productsList, setProductsList] = useState([]);
 
+  const userId = localStorage.getItem('userId');
+
   useEffect(() => {
-    const userId = localStorage.getItem('userId');
     Axios.get(`https://dummyjson.com/users/${userId}`).then((res) => {
       setUser(res.data)
     })
-  }, [setUser])
+  }, [setUser, userId])
 
   useEffect(() => {
     Axios.get('https://dummyjson.com/products').then((res) => {
@@ -32,7 +33,7 @@ const Products = () => {
       <div className='mb-12'>
         <span>
           <span className='m-2'>Welcome, {user.firstName}</span>
-          <span className='m-2'><Link to="/cart">My Cart</Link></span>
+          <span className='m-2'><Link to={`/cart/user/${userId}`}>My Cart</Link></span>
           <span className='m-2' onClick={logoutUser}>Logout</span>
         </span>
       </div>
