@@ -1,6 +1,27 @@
-import React from 'react'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import Axios from 'axios'
+import { useUserContext } from '../contexts/ContextProvider'
 
 const Products = () => {
+  const {user, setUser} = useUserContext();
+  const [productsList, setProductsList] = useState([]);
+
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    Axios.get(`https://dummyjson.com/users/${userId}`).then((res) => {
+      setUser(res.data)
+    })
+  }, [setUser])
+
+  useEffect(() => {
+    Axios.get('https://dummyjson.com/products').then((res) => {
+      console.log(res.data.products)
+      setProductsList(res.data.products)
+    })
+  }, [setProductsList])
+  
+
   const logoutUser = () => {
     localStorage.clear()
     window.location='/'
@@ -10,7 +31,8 @@ const Products = () => {
     <>
       <div className='mb-12'>
         <span>
-          <span className='m-2'>Account</span>
+          <span className='m-2'>Welcome, {user.firstName}</span>
+          <span className='m-2'>My Cart</span>
           <span className='m-2' onClick={logoutUser}>Logout</span>
         </span>
       </div>
@@ -33,23 +55,32 @@ const Products = () => {
           <thead className='bg-slate-600 text-gray-100'>
             <tr>
               <th className='w-1/8 px-4 py-2'>#</th>
-              <th className='w-1/8 px-4 py-2'>Product</th>
-              <th className='w-1/6 px-4 py-2'>Stock</th>
-              <th className='w-1/2 px-4 py-2'>Rating</th>
+              <th className='w-1/2 px-4 py-2'>Product</th>
+              <th className='w-1/8 px-4 py-2'>Stock</th>
+              <th className='w-1/8 px-4 py-2'>Rating</th>
               <th className='w-1/8 px-4 py-2'>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr className='text-gray-300'>
-              <td>1</td>
-              <td>Blackpink Shirt</td>
-              <td>100</td>
-              <td>*****</td>
-              <td>
-                <span className='text-xs'><button>View</button></span>
-                <span className='text-xs'><button>Add to Cart</button></span>
-              </td>
-            </tr>
+          {productsList.map((product, key) => {
+            return (
+              <tr key={key} className='text-center text-gray-300'>
+                <td className='px-4 py-2'>{product.id}</td>
+                <td className='px-4 py-2'>{product.title}</td>
+                <td className='px-4 py-2'>{product.stock}</td>
+                <td className='px-4 py-2'>{product.rating}</td>
+                <td className='px-4 py-2 space-x-6'>
+                    <span className='text-xs'>
+                      <Link to={`/viewproduct/${product.id}`}>
+                        <button>View</button>
+                      </Link>
+                    </span>
+
+                    <span className='text-xs'><button>Add to Cart</button></span>
+                </td>
+              </tr>
+            )
+          })}
           </tbody>
         </table>
       </div>

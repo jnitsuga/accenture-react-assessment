@@ -3,8 +3,10 @@ import { createContext, useContext, useState } from "react";
 const UserContext = createContext();
 
 export const ContextProvider = ({children}) => {
-  const [inputUsername, setInputUsername] = useState('')
-  const [inputPassword, setInputPassword] = useState('')
+  const [inputUsername, setInputUsername] = useState('');
+  const [inputPassword, setInputPassword] = useState('');
+  const [user, setUser] = useState({});
+  const [product, setProduct] = useState([]);
 
   return (
     <UserContext.Provider
@@ -12,7 +14,11 @@ export const ContextProvider = ({children}) => {
         inputUsername,
         setInputUsername,
         inputPassword,
-        setInputPassword
+        setInputPassword,
+        product,
+        setProduct,
+        user,
+        setUser,
       }}
     >
       {children}

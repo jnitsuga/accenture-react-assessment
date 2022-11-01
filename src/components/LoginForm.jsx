@@ -1,9 +1,15 @@
+import { useEffect } from 'react';
 import Axios from 'axios'
 import { toast } from 'react-toastify';
 import { useUserContext } from '../contexts/ContextProvider'
 
 const LoginForm = () => {
   const { inputUsername, setInputUsername, inputPassword, setInputPassword } = useUserContext();
+
+  useEffect(() => {
+    
+  }, [])
+  
 
   const login = async (e) => {
     e.preventDefault()
@@ -16,10 +22,11 @@ const LoginForm = () => {
       .then(res => {
         if(typeof res.data !== 'undefined') {
           localStorage.setItem('token', res.data.token)
+          localStorage.setItem('userId', res.data.id)
           toast('Successfully logged in')
-          window.setTimeout(function() {
+          // window.setTimeout(function() {
             window.location='/products'
-          }, 1500)
+          // }, 1500)
         }
       })
     } catch (error) {
@@ -47,9 +54,9 @@ const LoginForm = () => {
 
               <div className="relative">
                 <input
-                  type="email"
+                  type="text"
                   className="w-full rounded-lg border-gray-200 p-4 pr-12 text-sm shadow-sm"
-                  placeholder="Enter email"
+                  placeholder="Enter username"
                   onChange={(e) => {setInputUsername(e.target.value)}}
                   required
                 />
