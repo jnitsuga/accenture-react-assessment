@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import Axios from 'axios'
 import { useUserContext } from '../contexts/ContextProvider'
 
-const Products = () => {
+const Cart = () => {
   const {user, setUser} = useUserContext();
   const [productsList, setProductsList] = useState([]);
 
@@ -70,13 +70,18 @@ const Products = () => {
                 <td className='px-4 py-2'>{product.stock}</td>
                 <td className='px-4 py-2'>{product.rating}</td>
                 <td className='px-4 py-2 space-x-6'>
-                    <span className='text-xs'>
+                    <span className='text-xs space-x-4'>
                       <Link to={`/viewproduct/${product.id}`}>
                         <button>View</button>
                       </Link>
+                      <Link to={`/edit/${product.id}`}>
+                        <button>Edit</button>
+                      </Link>
+                      <Link to={`/delete/${product.id}`}>
+                        <button>Delete</button>
+                      </Link>
                     </span>
 
-                    <span className='text-xs'><button>Add to Cart</button></span>
                 </td>
               </tr>
             )
@@ -88,4 +93,4 @@ const Products = () => {
   )
 }
 
-export default Products
+export default Cart
