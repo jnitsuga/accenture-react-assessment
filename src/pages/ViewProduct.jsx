@@ -1,12 +1,13 @@
 import { useEffect } from "react"
 import Axios from 'axios'
-import { useParams } from 'react-router-dom' 
+import { Link, useParams } from 'react-router-dom' 
 import { useUserContext } from "../contexts/ContextProvider"
 
 const ViewProduct = () => {
   const {product, setProduct, user, setUser} = useUserContext()
-
   const { productId } = useParams();
+
+  const userId = localStorage.getItem('userId');
 
   useEffect(() => {
     Axios.get(`https://dummyjson.com/products/${productId}`).then((res) => {
@@ -34,7 +35,7 @@ const ViewProduct = () => {
           <div>
             <span>
               <span className='m-2'>Welcome, {user.firstName}</span>
-              <span className='m-2'>My Cart</span>
+              <span className='m-2'><Link to={`/carts/user/${userId}`}>My Cart</Link></span>
               <span className='m-2' onClick={logoutUser}>Logout</span>
             </span>
           </div>
