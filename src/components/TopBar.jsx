@@ -42,20 +42,20 @@ const TopBar = () => {
               </Link>
             </li>
 
-            <li>
+            {/* <li>
               <Link to={`/carts/user/${userId}`} className="text-gray-500 transition hover:text-gray-500/75">
                 My Cart
               </Link>
-            </li>
+            </li> */}
 
             <li>
-              <Link to={`/carts/user/${userId}`} className="text-gray-500 transition hover:text-gray-500/75">
+              <Link to={``} className="text-gray-500 transition hover:text-gray-500/75">
                 Support
               </Link>
             </li>
 
             <li>
-              <Link to={`/carts/user/${userId}`} className="text-gray-500 transition hover:text-gray-500/75">
+              <Link to={``} className="text-gray-500 transition hover:text-gray-500/75">
                 FAQs
               </Link>
             </li>
@@ -73,7 +73,7 @@ const TopBar = () => {
             Login
           </a> */}
 
-          <div class="hidden sm:flex">
+          <div class="sm:flex">
             <a
               class="rounded-md px-5 py-2.5 text-sm font-medium text-teal-600"
               href="/products"
@@ -81,11 +81,20 @@ const TopBar = () => {
               Welcome, {user.firstName}
             </a>
           </div>
-          
 
-          <div class="hidden sm:flex">
+          <div class="sm-flex">
+            <Link to={`/carts/user/${userId}`}>
             <button
-              class="rounded-md bg-gray-100 px-5 py-1 text-sm font-medium text-teal-600"
+              class="rounded-md bg-rose-400 px-5 py-2 text-sm font-medium text-white"
+            >
+              My Cart
+            </button>
+            </Link>
+          </div>
+          
+          <div class="sm-flex">
+            <button
+              class="rounded-md bg-gray-100 px-5 py-2 text-sm font-medium text-gray-500 ml-2"
               onClick={logoutUser}
             >
               Log Out

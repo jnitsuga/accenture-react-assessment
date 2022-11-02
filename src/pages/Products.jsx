@@ -8,6 +8,7 @@ import { HiOutlineSquares2X2 } from 'react-icons/hi2'
 import CategoryTabsAndSearch from '../components/CategoryTabsAndSearch'
 import TopBar from '../components/TopBar'
 import Banner01 from '../components/Banner01'
+import { toast } from 'react-toastify'
 
 const Products = () => {
   const { setUser } = useUserContext();
@@ -41,7 +42,8 @@ const Products = () => {
       ]
     })
     .then((res) => {
-      console.log(res.data)
+      console.log(res.data.products[0].title)
+      toast(`${res.data.products[0].title} added to cart`)
     })
   }
 

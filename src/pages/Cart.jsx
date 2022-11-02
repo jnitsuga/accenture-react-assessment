@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import Axios from 'axios'
 import { useUserContext } from '../contexts/ContextProvider'
 import TopBar from '../components/TopBar'
+import { toast } from 'react-toastify'
 // import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai'
 
 const Cart = () => {
@@ -34,12 +35,11 @@ const Cart = () => {
       }
     })
   }, [userId, setProductsList])
-
-
   
   const deleteItem = (productId) => {
     Axios.delete(`https://dummyjson.com/products/${productId}`).then((res) => {
-      console.log(res)
+      console.log(res.data)
+      toast(`Deleted ${res.data.title}`)
     })
   }
 
@@ -48,7 +48,8 @@ const Cart = () => {
       <TopBar />
 
       <div>
-        <p className='text-2xl font-bold'>Shopping Cart</p>
+        <button className='rounded-md bg-gray-100 text-gray-600 px-5 py-2 text-sm font-medium mb-6'><Link to='/products'>Back</Link></button>
+        <p className='text-2xl font-bold text-gray-600'>Shopping Cart</p>
       </div>
 
       <div className='m-4'>
@@ -78,7 +79,6 @@ const Cart = () => {
                       <button>Edit</button>
                       <button onClick={() => deleteItem(product.id)}>Delete</button>
                     </span>
-
                 </td>
               </tr>
             )
@@ -88,8 +88,8 @@ const Cart = () => {
       </div>
 
       <div>
-        <p className="text-xl font-bold m-4">Total: <s className='text-sm'>${priceTotal}</s> <span className='text-green-500'>${discountedTotal}</span></p>
-        <Link to={``}>
+        <p className="text-xl font-bold m-4 text-gray-600">Total: <s className='text-sm'>${priceTotal}</s> <span className='text-green-500'>${discountedTotal}</span></p>
+        <Link to={`/carts/user/${userId}/checkout`}>
           <button type="submit" className="w-1/6 rounded bg-rose-600 px-6 py-3 text-sm font-bold uppercase tracking-wide text-white">
             Checkout
           </button>

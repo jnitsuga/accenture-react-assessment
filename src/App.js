@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Products from './pages/Products';
 import ViewProduct from './pages/ViewProduct';
 import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
 // import AddToCart from './components/AddToCart'
 
 function App() {
@@ -22,8 +23,7 @@ function App() {
           <Route path='/products' element={<Products />} />
           <Route path='/viewproduct/:productId' element={<ViewProduct />} />
           <Route path='/carts/user/:userId' element={<Cart />} />
-          <Route path='/carts/add/:productId' />
-          <Route path='/products/:productId' />
+          <Route path='/carts/user/:userId/checkout' element={<Checkout />} />
 
         </Routes>
       

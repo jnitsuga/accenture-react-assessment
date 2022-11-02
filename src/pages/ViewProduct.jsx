@@ -2,16 +2,17 @@ import { useEffect } from "react"
 import Axios from 'axios'
 import { Link, useParams } from 'react-router-dom' 
 import { useUserContext } from "../contexts/ContextProvider"
+import { toast } from 'react-toastify'
 
 const ViewProduct = () => {
-  const {product, setProduct, user, setUser} = useUserContext()
+  const {product, setProduct, user, setUser, productsList } = useUserContext()
   const { productId } = useParams();
 
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
     Axios.get(`https://dummyjson.com/products/${productId}`).then((res) => {
-      console.log(res.data)
+      // console.log(res.data)
       setProduct(res.data)
     })
   }, [productId, setProduct])
@@ -23,7 +24,22 @@ const ViewProduct = () => {
     })
   }, [setUser])
 
-  
+  const addToCart = (productId) => {
+    // console.log(productsList)
+    Axios.post(`https://dummyjson.com/carts/add`, {
+      userId: userId,
+      products: [
+        {
+          id: productId,
+          quantity: 1,
+        }
+      ]
+    })
+    .then((res) => {    
+      console.log(res.data.products[0].title)
+      toast(`${res.data.products[0].title} added to cart`)
+    })
+  }
 
   return (
     <>
@@ -42,13 +58,13 @@ const ViewProduct = () => {
             <div className="lg:col-span-3">
               <div className="relative mt-4">
                 <img
-                  alt="Tee"
+                  alt="thumnbnail"
                   // src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
                   src={product.thumbnail}
                   className="h-72 w-full rounded-xl object-cover lg:h-[540px]"
                 />
 
-                <div
+                {/* <div
                   className="absolute bottom-4 left-1/2 inline-flex -translate-x-1/2 items-center rounded-full bg-black/75 px-3 py-1.5 text-white"
                 >
                   <svg
@@ -67,14 +83,13 @@ const ViewProduct = () => {
                   </svg>
 
                   <span className="ml-1.5 text-xs"> Hover to zoom </span>
-                </div>
+                </div> */}
               </div>
 
-              
             </div>
 
             <div className="lg:sticky lg:top-0">
-              <form className="space-y-2 lg:pt-8">
+              <div className="space-y-2 lg:pt-8">
                 <h1 className="text-2xl font-bold lg:text-3xl">{product.title}</h1>
 
                 <p className="text-sm text-gray-500">Brand: {product.brand}</p>
@@ -96,8 +111,9 @@ const ViewProduct = () => {
                 </div>
 
                 <button
-                  type="submit"
-                  className="w-full rounded bg-red-700 px-6 py-3 text-sm font-bold uppercase tracking-wide text-white"
+                  type='button'
+                  className="w-full rounded bg-rose-600 px-6 py-3 text-sm font-bold uppercase tracking-wide text-white"
+                  onClick={() => addToCart(product.id)}
                 >
                   Add to cart
                 </button>
@@ -109,7 +125,7 @@ const ViewProduct = () => {
                   Notify when on sale
                 </button>
                 
-              </form>
+              </div>
             </div>
 
           </div>
