@@ -23,23 +23,12 @@ const ViewProduct = () => {
     })
   }, [setUser])
 
-  const logoutUser = () => {
-    localStorage.clear()
-    window.location='/'
-  }
+  
 
   return (
     <>
       <section>
         <div className="relative mx-auto max-w-screen-xl px-4 py-8">
-          <div>
-            <span>
-              <span className='m-2'>Welcome, {user.firstName}</span>
-              <span className='m-2'><Link to={`/carts/user/${userId}`}>My Cart</Link></span>
-              <span className='m-2' onClick={logoutUser}>Logout</span>
-            </span>
-          </div>
-
           <div className="m-6">
             <a
               className="inline-flex items-center rounded border border-indigo-600 px-8 py-3 text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500"

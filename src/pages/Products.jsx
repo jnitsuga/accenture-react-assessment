@@ -1,15 +1,18 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Axios from 'axios'
 import { useUserContext } from '../contexts/ContextProvider'
-// import { FaCartPlus, FaSearch } from 'react-icons/fa'
+import { HiOutlineViewList } from 'react-icons/hi'
+import { HiOutlineSquares2X2 } from 'react-icons/hi2'
 
 import CategoryTabsAndSearch from '../components/CategoryTabsAndSearch'
+import TopBar from '../components/TopBar'
+import Banner01 from '../components/Banner01'
 
 const Products = () => {
-  const { user, setUser } = useUserContext();
+  const { setUser } = useUserContext();
   const { productsList, setProductsList } = useUserContext([]);
-  const { searchTerm } = useUserContext('')
+  const [listView, setListView ] = useState(false)
 
   const userId = localStorage.getItem('userId');
 
@@ -42,26 +45,44 @@ const Products = () => {
     })
   }
 
-  const logoutUser = () => {
-    localStorage.clear()
-    window.location='/'
-  }
+  // const toggleView = () => {
+  //   setListView(true)
+  // }
 
   return (
     <>
-      <div className='mb-12'>
-        <span>
-          <span className='m-2'>Welcome, {user.firstName}</span>
-          <span className='m-2'><Link to={`/carts/user/${userId}`}>My Cart</Link></span>
-          <span className='m-2' onClick={logoutUser}>Logout</span>
-        </span>
-      </div>
-
+      <TopBar />
+      <Banner01 />
       <CategoryTabsAndSearch />
 
+      {/* View Toggle */}
+      <div className='flex justify-end mr-4'>
+      <span class="inline-flex divide-x overflow-hidden rounded-md border bg-white shadow-sm">
+        <button
+          class="inline-block p-3 text-gray-700 hover:bg-gray-50 focus:relative"
+          title="Edit Product"
+          onClick={() => setListView(false)}
+        >
+          <HiOutlineSquares2X2 />
+        </button>
+
+        <button
+          class="inline-block p-3 text-gray-700 hover:bg-gray-50 focus:relative"
+          title="Delete Product"
+          onClick={() => setListView(true)}
+        >
+          <HiOutlineViewList />
+        </button>
+      </span>
+      </div>
+
+
+      {/* Table Style */}
+      {listView ?
+      <>
       <div className='m-4'>
         <table className='table-fixed w-full bg-slate-800 drop-shadow-xl'>
-          <thead className='bg-slate-600 text-gray-100'>
+          <thead className='bg-teal-600 text-gray-100'>
             <tr>
               <th className='w-1/8 px-4 py-2'>#</th>
               <th className='w-1/2 px-4 py-2'>Product</th>
@@ -95,6 +116,48 @@ const Products = () => {
           </tbody>
         </table>
       </div>
+      </>
+      :
+      <>
+      {/* Cards Style */}
+      {/* <p className='text-xl font-bold mt-10'>Products</p> */}
+      <div className='p-10 pt-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5'>
+      {productsList.map((product, key) => {
+        return (
+          <div key={key} class="relative block border border-gray-200 bg-white w-full rounded-lg drop-shadow-sm">
+            <Link to={`/viewproduct/${product.id}`}>
+            <img
+              alt="thumbnail"
+              src={product.thumbnail}
+              class="h-56 w-full object-contain lg:h-72"
+            />
+            </Link>
+
+            <div class="p-6">
+              <h3 class="mt-2 text-lg font-bold">{product.title}</h3>
+
+              <p class="mt-2 text-sm text-gray-700">${product.price}</p>
+              <p class="mt-2 text-xs text-gray-700">Rating: {product.rating}</p>
+              <p class="mt-2 text-xs text-gray-700">Stocks Left: {product.stock}</p>
+
+              <button
+                type="button"
+                class="mt-2 block w-full rounded-sm bg-orange-200 p-4 text-sm font-medium"
+                onClick={() => addToCart(product.id)}
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        )
+      })}
+      </div>
+      </>
+
+    }
+
+
+
     </>
   )
 }
