@@ -3,12 +3,11 @@ import Axios from 'axios'
 import { useUserContext } from '../contexts/ContextProvider'
 import { Link, useParams } from 'react-router-dom'
 import mainLogo from '../assets/storebo-logo.png'
-import { toast } from 'react-toastify';
 
 const Checkout = () => {
   const {user, setUser} = useUserContext();
   const {productsList, setProductsList} = useUserContext([]);
-  const [ priceTotal, setPriceTotal ] = useState('')
+  const [ setPriceTotal ] = useState('')
   const [ discountedTotal, setDiscountedTotal ] = useState('')
 
   const { userId } = useParams();
@@ -33,7 +32,7 @@ const Checkout = () => {
         setProductsList(res.data.carts[i].products)
       }
     })
-  }, [userId, setProductsList])
+  }, [userId, setProductsList, setPriceTotal])
 
   return (
     <>
@@ -185,8 +184,8 @@ const Checkout = () => {
 
             <div class="col-span-6">
               <Link
-                to='/products'
-                onClick={() => (toast(`Purchase amounting to $${discountedTotal} completed successfully!`))}
+                to='/success'
+                // onClick={() => (toast(`Purchase amounting to $${discountedTotal} completed successfully!`))}
                 class="block w-full rounded-lg bg-black p-2.5 text-sm text-white"
                 type="submit"
               >

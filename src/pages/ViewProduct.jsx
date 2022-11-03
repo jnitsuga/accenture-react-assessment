@@ -5,7 +5,7 @@ import { useUserContext } from "../contexts/ContextProvider"
 import { toast } from 'react-toastify'
 
 const ViewProduct = () => {
-  const {product, setProduct, user, setUser, productsList } = useUserContext()
+  const {product, setProduct, setUser } = useUserContext()
   const { productId } = useParams();
 
   const userId = localStorage.getItem('userId');
@@ -45,13 +45,8 @@ const ViewProduct = () => {
     <>
       <section>
         <div className="relative mx-auto max-w-screen-xl px-4 py-8">
-          <div className="m-6">
-            <a
-              className="inline-flex items-center rounded border border-indigo-600 px-8 py-3 text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500"
-              href="/products"
-            >
-              <span class="text-sm font-medium"> Back </span>
-            </a>
+          <div>
+          <button className='rounded-md bg-gray-200 text-gray-600 px-5 py-2 text-sm font-medium mb-6 drop-shadow-sm'><Link to='/products'>Back</Link></button>
           </div>
 
           <div className="grid gap-8 lg:grid-cols-4 lg:items-start">

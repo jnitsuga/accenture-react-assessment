@@ -4,11 +4,10 @@ import Axios from 'axios'
 import { useUserContext } from '../contexts/ContextProvider'
 import TopBar from '../components/TopBar'
 import { toast } from 'react-toastify'
-// import { AiOutlineMinusSquare, AiOutlinePlusSquare } from 'react-icons/ai'
 
 const Cart = () => {
-  const {user, setUser} = useUserContext();
-  const {productsList, setProductsList} = useUserContext([]);
+  const { setUser, showEditQuantity, setShowEditQuantity, inputQuantity, setInputQuantity } = useUserContext();
+  const { productsList, setProductsList } = useUserContext([]);
   const [ priceTotal, setPriceTotal ] = useState('')
   const [ discountedTotal, setDiscountedTotal ] = useState('')
 
@@ -25,9 +24,7 @@ const Cart = () => {
     Axios.get(`https://dummyjson.com/carts/user/${userId}`).then((res) => {
       for (let i = 0; i < res.data.carts.length; i++) {
         const detes = res.data.carts[i]
-        console.log(
-          detes
-        )
+        console.log(detes)
         
         setPriceTotal(res.data.carts[i].total)
         setDiscountedTotal(res.data.carts[i].discountedTotal)
@@ -38,8 +35,29 @@ const Cart = () => {
   
   const deleteItem = (productId) => {
     Axios.delete(`https://dummyjson.com/products/${productId}`).then((res) => {
-      console.log(res.data)
+      // console.log(res.data)
       toast(`Deleted ${res.data.title}`)
+    })
+  }
+
+  const editItem = (productId, productQuantity) => {
+    Axios.get(`https://dummyjson.com/carts/user/${userId}`).then((res) => {
+      for (let i = 0; i < res.data.carts.length; i++) {
+        console.log(res.data.carts[i].id)
+        const cartId = res.data.carts[i].id
+
+        Axios.put(`https://dummyjson.com/carts/${cartId}`, {
+          products: [
+            {
+              id: productId,
+              quantity: productQuantity,
+            }
+          ]
+        })
+        .then((res) => {
+          console.log(res.data)
+        })
+      }
     })
   }
 
@@ -48,7 +66,7 @@ const Cart = () => {
       <TopBar />
 
       <div>
-        <button className='rounded-md bg-gray-100 text-gray-600 px-5 py-2 text-sm font-medium mb-6'><Link to='/products'>Back</Link></button>
+        <button className='rounded-md bg-gray-200 text-gray-600 px-5 py-2 text-sm font-medium mb-6 drop-shadow-sm'><Link to='/products'>Back</Link></button>
         <p className='text-2xl font-bold text-gray-600'>Shopping Cart</p>
       </div>
 
@@ -69,16 +87,34 @@ const Cart = () => {
               <tr key={key} className='text-center text-gray-300'>
                 <td className='px-4 py-2'>{product.id}</td>
                 <td className='px-4 py-2'>{product.title}</td>
-                <td className='px-4 py-2'>{product.quantity}</td>
+
+                {showEditQuantity ? 
+                  <td className='px-4 py-2'>
+                    <input
+                      type="number"
+                      id="quantity"
+                      placeholder={product.quantity}
+                      className="m-1 p-1 w-16 rounded-md border-gray-200 shadow-sm sm:text-sm text-center"
+                      onChange={(e) => {setInputQuantity(e.target.value)}}
+                    />
+                    <button
+                      className='rounded-md bg-green-300 text-gray-800 text-sm p-1'
+                      onClick={() => {editItem(product.id, inputQuantity); setShowEditQuantity(!showEditQuantity)}}
+                    >
+                      Save
+                    </button> 
+                  </td>
+                : <td> {product.quantity} </td>}
+
                 <td className='px-4 py-2'>{product.price}</td>
                 <td className='px-4 py-2 space-x-6'>
-                    <span className='text-xs space-x-4'>
-                      <Link to={`/viewproduct/${product.id}`}>
-                        <button>View</button>
-                      </Link>
-                      <button>Edit</button>
-                      <button onClick={() => deleteItem(product.id)}>Delete</button>
-                    </span>
+                  <span className='text-xs space-x-4'>
+                    <Link to={`/viewproduct/${product.id}`}>
+                      <button>View</button>
+                    </Link>
+                    <button onClick={() => setShowEditQuantity(!showEditQuantity)}>Edit</button>
+                    <button onClick={() => deleteItem(product.id)}>Delete</button>
+                  </span>
                 </td>
               </tr>
             )

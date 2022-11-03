@@ -9,6 +9,9 @@ export const ContextProvider = ({children}) => {
   const [product, setProduct] = useState([]);
   const [searchTerm, setSearchTerm] = useState('')
   const [productsList, setProductsList] = useState([]);
+  const [ inputQuantity, setInputQuantity ] = useState('');
+
+  const [ showEditQuantity, setShowEditQuantity ] = useState(false)
 
   return (
     <UserContext.Provider
@@ -25,6 +28,10 @@ export const ContextProvider = ({children}) => {
         setProductsList,
         searchTerm,
         setSearchTerm,
+        showEditQuantity,
+        setShowEditQuantity,
+        inputQuantity,
+        setInputQuantity,
       }}
     >
       {children}

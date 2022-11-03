@@ -30,26 +30,41 @@ const Products = () => {
     })
   }, [setProductsList])
     
+  // const addToCart = (productId) => {
+  //   console.log(productsList)
+  //   Axios.post(`https://dummyjson.com/carts/add`, {
+  //     userId: userId,
+  //     products: [
+  //       {
+  //         id: productId,
+  //         quantity: 1,
+  //       }
+  //     ]
+  //   })
+  //   .then((res) => {
+  //     console.log(res.data.products[0].title)
+  //     toast(`${res.data.products[0].title} added to cart`)
+  //   })
+  // }
+
   const addToCart = (productId) => {
-    console.log(productsList)
-    Axios.post(`https://dummyjson.com/carts/add`, {
-      userId: userId,
-      products: [
-        {
-          id: productId,
-          quantity: 1,
-        }
-      ]
-    })
-    .then((res) => {
-      console.log(res.data.products[0].title)
-      toast(`${res.data.products[0].title} added to cart`)
+    Axios.get(`https://dummyjson.com/carts/user/${userId}`).then((res) => {
+      console.log(res.data.carts[0].id)
+      const cartId = res.data.carts[0].id
+      Axios.put(`https://dummyjson.com/carts/${cartId}`, {
+        products: [
+          {
+            id: productId,
+            quantity: 1,
+          }
+        ]
+      })
+      .then((res) => {
+        console.log(res.data.products)
+        toast(`${res.data.products[0].title} added to cart`)
+      })
     })
   }
-
-  // const toggleView = () => {
-  //   setListView(true)
-  // }
 
   return (
     <>
@@ -59,9 +74,9 @@ const Products = () => {
 
       {/* View Toggle */}
       <div className='flex justify-end mr-4'>
-      <span class="inline-flex divide-x overflow-hidden rounded-md border bg-white shadow-sm">
+      <span className="inline-flex divide-x overflow-hidden rounded-md border bg-white shadow-sm">
         <button
-          class="inline-block p-3 text-gray-700 hover:bg-gray-50 focus:relative"
+          className="inline-block p-3 text-gray-700 hover:bg-gray-50 focus:relative"
           title="Edit Product"
           onClick={() => setListView(false)}
         >
@@ -69,7 +84,7 @@ const Products = () => {
         </button>
 
         <button
-          class="inline-block p-3 text-gray-700 hover:bg-gray-50 focus:relative"
+          className="inline-block p-3 text-gray-700 hover:bg-gray-50 focus:relative"
           title="Delete Product"
           onClick={() => setListView(true)}
         >
@@ -77,7 +92,6 @@ const Products = () => {
         </button>
       </span>
       </div>
-
 
       {/* Table Style */}
       {listView ?
@@ -126,25 +140,25 @@ const Products = () => {
       <div className='p-10 pt-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5'>
       {productsList.map((product, key) => {
         return (
-          <div key={key} class="relative block border border-gray-200 bg-white w-full rounded-lg drop-shadow-sm">
+          <div key={key} className="relative block border border-gray-200 bg-white w-full rounded-lg drop-shadow-sm">
             <Link to={`/viewproduct/${product.id}`}>
             <img
               alt="thumbnail"
               src={product.thumbnail}
-              class="h-56 w-full object-contain lg:h-72"
+              className="h-56 w-full object-contain lg:h-72"
             />
             </Link>
 
-            <div class="p-6">
-              <h3 class="mt-2 text-lg font-bold">{product.title}</h3>
+            <div className="p-6">
+              <h3 className="mt-2 text-lg font-bold">{product.title}</h3>
 
-              <p class="mt-2 text-sm text-gray-700">${product.price}</p>
-              <p class="mt-2 text-xs text-gray-700">Rating: {product.rating}</p>
-              <p class="mt-2 text-xs text-gray-700">Stocks Left: {product.stock}</p>
+              <p className="mt-2 text-sm text-gray-700">${product.price}</p>
+              <p className="mt-2 text-xs text-gray-700">Rating: {product.rating}</p>
+              <p className="mt-2 text-xs text-gray-700">Stocks Left: {product.stock}</p>
 
               <button
                 type="button"
-                class="mt-2 block w-full rounded-sm bg-orange-200 p-4 text-sm font-medium"
+                className="mt-2 block w-full rounded-sm bg-orange-200 p-4 text-sm font-medium"
                 onClick={() => addToCart(product.id)}
               >
                 Add to Cart
@@ -155,11 +169,7 @@ const Products = () => {
       })}
       </div>
       </>
-
     }
-
-
-
     </>
   )
 }
