@@ -1,15 +1,14 @@
-import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Axios from 'axios'
 import { toast } from 'react-toastify';
 import { useUserContext } from '../contexts/ContextProvider'
+import mainLogo from '../assets/storebo-logo.png'
+import { Link } from 'react-router-dom'
 
 const LoginForm = () => {
   const { inputUsername, setInputUsername, inputPassword, setInputPassword } = useUserContext();
-
-  useEffect(() => {
-    
-  }, [])
   
+  const navigate = useNavigate();
 
   const login = async (e) => {
     e.preventDefault()
@@ -23,10 +22,8 @@ const LoginForm = () => {
         if(typeof res.data !== 'undefined') {
           localStorage.setItem('token', res.data.token)
           localStorage.setItem('userId', res.data.id)
+          navigate('/products')
           toast('Successfully logged in')
-          // window.setTimeout(function() {
-            window.location='/products'
-          // }, 1500)
         }
       })
     } catch (error) {
@@ -40,7 +37,8 @@ const LoginForm = () => {
       <section className="relative flex flex-wrap lg:h-screen lg:items-center">
         <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-lg text-center">
-            <h1 className="text-2xl font-bold sm:text-3xl">Get started today!</h1>
+            <img src={mainLogo} alt="logo" className='h-32 mx-auto mb-12' />
+            <h1 className="text-2xl font-bold sm:text-3xl">Get the best deals today!</h1>
 
             <p className="mt-4 text-gray-500">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Et libero nulla
@@ -119,13 +117,13 @@ const LoginForm = () => {
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-500">
                 No account?
-                <span className="underline">Sign up</span>
+                <Link to='/register' className="underline"> Sign up</Link>
               </p>
 
               <button
                 onClick={login}
                 type="submit"
-                className="ml-3 inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
+                className="ml-3 inline-block rounded-lg bg-teal-500 px-5 py-3 text-sm font-medium text-white"
               >
                 Sign in
               </button>

@@ -10,7 +10,7 @@ import ViewProduct from './pages/ViewProduct';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import CheckoutSuccess from './pages/CheckoutSuccess';
-// import AddToCart from './components/AddToCart'
+import Register from './pages/Register';
 
 function App() {
   return (
@@ -21,6 +21,7 @@ function App() {
 
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/register' element={<Register />} />
           <Route path='/products' element={<Products />} />
           <Route path='/viewproduct/:productId' element={<ViewProduct />} />
           <Route path='/carts/user/:userId' element={<Cart />} />

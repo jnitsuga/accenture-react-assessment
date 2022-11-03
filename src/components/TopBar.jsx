@@ -1,15 +1,15 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useUserContext } from '../contexts/ContextProvider';
 import mainLogo from '../assets/storebo-logo.png'
 
 const TopBar = () => {
   const { user } = useUserContext();
-
   const userId = localStorage.getItem('userId');
+  const navigate = useNavigate();
 
   const logoutUser = () => {
     localStorage.clear()
-    window.location='/'
+    navigate('/')
   }
 
   return (
